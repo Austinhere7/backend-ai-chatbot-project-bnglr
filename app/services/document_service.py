@@ -53,13 +53,17 @@ class DocumentProcessor:
         Returns:
             List of text chunks
         """
+        if chunk_overlap >= chunk_size:
+            # Invalid configuration, use no overlap
+            chunk_overlap = 0
+        
         chunks = []
         start = 0
         text_length = len(text)
         
         while start < text_length:
             # Calculate end position
-            end = start + chunk_size
+            end = min(start + chunk_size, text_length)
             
             # Extract chunk
             chunk = text[start:end]
@@ -68,12 +72,12 @@ class DocumentProcessor:
             if chunk.strip():
                 chunks.append(chunk)
             
+            # If we've reached the end, break
+            if end >= text_length:
+                break
+            
             # Move start position (with overlap)
             start = end - chunk_overlap
-            
-            # Prevent infinite loop
-            if start >= text_length:
-                break
         
         return chunks
 

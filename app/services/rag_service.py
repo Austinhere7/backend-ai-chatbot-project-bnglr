@@ -30,6 +30,10 @@ class RAGService:
         """
         Retrieve relevant document chunks using vector similarity search.
         
+        Note: For optimal performance with large datasets, ensure database indexes
+        are created on session_id and document_id columns. Use EXPLAIN ANALYZE
+        to monitor query performance.
+        
         Args:
             db: Database session
             session_id: Session ID to filter documents

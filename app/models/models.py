@@ -2,7 +2,7 @@
 Database models for the AI Chatbot application.
 Defines the schema for sessions, messages, and documents.
 """
-from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, LargeBinary
+from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, LargeBinary, Index
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from pgvector.sqlalchemy import Vector
@@ -34,10 +34,10 @@ class Message(Base):
     __tablename__ = "messages"
     
     id = Column(Integer, primary_key=True, index=True)
-    session_id = Column(Integer, ForeignKey("sessions.id"), nullable=False)
+    session_id = Column(Integer, ForeignKey("sessions.id"), nullable=False, index=True)
     role = Column(String(50), nullable=False)  # 'user' or 'assistant'
     content = Column(Text, nullable=False)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), index=True)
     
     # Relationship
     session = relationship("Session", back_populates="messages")
@@ -51,7 +51,7 @@ class Document(Base):
     __tablename__ = "documents"
     
     id = Column(Integer, primary_key=True, index=True)
-    session_id = Column(Integer, ForeignKey("sessions.id"), nullable=False)
+    session_id = Column(Integer, ForeignKey("sessions.id"), nullable=False, index=True)
     filename = Column(String(255), nullable=False)
     file_type = Column(String(50), nullable=False)
     content = Column(Text)  # Full text content of the document
@@ -66,11 +66,13 @@ class DocumentChunk(Base):
     """
     DocumentChunk model to store document chunks with embeddings.
     Uses pgvector for storing and querying vector embeddings.
+    Note: Embedding dimension (384) matches all-MiniLM-L6-v2 model.
+    If changing the embedding model, update this dimension accordingly.
     """
     __tablename__ = "document_chunks"
     
     id = Column(Integer, primary_key=True, index=True)
-    document_id = Column(Integer, ForeignKey("documents.id"), nullable=False)
+    document_id = Column(Integer, ForeignKey("documents.id"), nullable=False, index=True)
     chunk_text = Column(Text, nullable=False)
     chunk_index = Column(Integer, nullable=False)
     # Vector embedding (dimension=384 for all-MiniLM-L6-v2 model)

@@ -82,4 +82,7 @@ async def chat(
     
     except Exception as e:
         db.rollback()
-        raise HTTPException(status_code=500, detail=f"Error generating response: {str(e)}")
+        # Log the full error internally
+        import logging
+        logging.error(f"Error generating response: {str(e)}", exc_info=True)
+        raise HTTPException(status_code=500, detail="An error occurred while generating the response. Please try again.")

@@ -109,4 +109,7 @@ async def upload_document(
     
     except Exception as e:
         db.rollback()
-        raise HTTPException(status_code=500, detail=f"Error processing document: {str(e)}")
+        # Log the full error internally
+        import logging
+        logging.error(f"Error processing document: {str(e)}", exc_info=True)
+        raise HTTPException(status_code=500, detail="An error occurred while processing the document. Please try again.")
