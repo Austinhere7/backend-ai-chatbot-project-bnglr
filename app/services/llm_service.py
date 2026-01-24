@@ -9,7 +9,22 @@ from app.config.settings import settings
 
 
 class LLMService:
-    """Service for interacting with different LLM providers."""
+    """
+    Service for managing language model interactions.
+    
+    Supports multiple LLM providers:
+    - OpenAI: Uses gpt-3.5-turbo model
+    - Google Gemini: Uses gemini-pro model
+    - Anthropic Claude: Uses claude-3-sonnet model
+    
+    The provider is configured via the LLM_PROVIDER environment variable.
+    Each provider requires its specific API key set in environment variables.
+    
+    Example usage:
+        from app.services.llm_service import llm_service
+        llm = llm_service.get_llm()
+        response = llm.invoke([("human", "Hello!")])
+    """
     
     def __init__(self):
         """Initialize the LLM service with configured provider."""

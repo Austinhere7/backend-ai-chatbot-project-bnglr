@@ -127,3 +127,64 @@ async def get_conversation_history(
         session_id=session_id,
         messages=messages
     )
+
+
+@router.delete("/{session_id}")
+async def delete_session(
+    session_id: str,
+    db: DBSession = Depends(get_db)
+):
+    """
+    Delete a session and all associated data (messages and documents).
+    
+    Args:
+        session_id: Session ID to delete
+        db: Database session
+        
+    Returns:
+        Success message
+        
+    Raises:
+        HTTPException: If session not found
+    """
+    session = db.query(Session).filter(
+        Session.session_id == session_id
+    ).first()
+    
+    if not session:
+        raise HTTPException(status_code=404, detail="Session not found")
+    
+    # Delete the session (cascade will delete related messages and documents)
+    db.delete(session)
+    db.commit()
+    
+    return {
+        "message": f"Session {session_id} deleted successfully",
+        "session_id": session_id
+    }
+
+
+@router.get("/", response_model=List[SessionResponse])
+async def list_sessions(
+    db: DBSession = Depends(get_db)
+):
+    """
+    List all available sessions.
+    
+    Args:
+        db: Database session
+        
+    Returns:
+        List of SessionResponse objects
+    """
+    sessions = db.query(Session).order_by(Session.created_at.desc()).all()
+    
+    return [
+        SessionResponse(
+            session_id=session.session_id,
+            created_at=session.created_at,
+            message_count=len(session.messages),
+            document_count=len(session.documents)
+        )
+        for session in sessions
+    ]

@@ -13,7 +13,19 @@ from app.services.embedding_service import embedding_service
 
 
 class RAGService:
-    """Service for Retrieval Augmented Generation."""
+    """
+    Service for Retrieval Augmented Generation (RAG).
+    
+    This service implements the core chatbot logic by:
+    1. Retrieving relevant document chunks using vector similarity search
+    2. Building context from relevant documents
+    3. Retrieving conversation history for context awareness
+    4. Generating responses using the LLM with the retrieved context
+    
+    The RAG approach enhances the LLM's responses by grounding them in
+    user-provided documents, ensuring more accurate and contextually
+    relevant answers.
+    """
     
     def __init__(self):
         """Initialize RAG service."""

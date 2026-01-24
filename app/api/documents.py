@@ -113,3 +113,49 @@ async def upload_document(
         import logging
         logging.error(f"Error processing document: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail="An error occurred while processing the document. Please try again.")
+
+
+@router.get("/list/{session_id}")
+async def list_documents(
+    session_id: str,
+    db: DBSession = Depends(get_db)
+):
+    """
+    List all documents uploaded for a session.
+    
+    Args:
+        session_id: Session ID to filter documents
+        db: Database session
+        
+    Returns:
+        List of documents with metadata
+        
+    Raises:
+        HTTPException: If session not found
+    """
+    # Get session
+    session = db.query(Session).filter(
+        Session.session_id == session_id
+    ).first()
+    
+    if not session:
+        raise HTTPException(status_code=404, detail="Session not found")
+    
+    # Get all documents for this session
+    documents = db.query(Document).filter(
+        Document.session_id == session.id
+    ).all()
+    
+    return {
+        "session_id": session_id,
+        "documents": [
+            {
+                "id": doc.id,
+                "filename": doc.filename,
+                "file_type": doc.file_type,
+                "created_at": doc.created_at,
+                "chunks_count": len(doc.chunks)
+            }
+            for doc in documents
+        ]
+    }

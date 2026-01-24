@@ -9,7 +9,21 @@ import numpy as np
 
 
 class EmbeddingService:
-    """Service for generating text embeddings."""
+    """
+    Service for generating text embeddings.
+    
+    Uses Sentence Transformers to convert text into dense vector embeddings.
+    These embeddings are used for:
+    - Vector similarity search in the document chunks
+    - Finding relevant documents for user queries
+    - Semantic understanding of text
+    
+    Default model: all-MiniLM-L6-v2 (384-dimensional embeddings)
+    This is a lightweight, efficient model suitable for RAG applications.
+    
+    To use a different model, set EMBEDDING_MODEL in .env file.
+    Ensure the model dimension matches the Vector column definition in models.
+    """
     
     def __init__(self):
         """Initialize the embedding model."""

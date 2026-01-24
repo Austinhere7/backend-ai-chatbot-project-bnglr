@@ -8,7 +8,26 @@ import io
 
 
 class DocumentProcessor:
-    """Service for processing uploaded documents."""
+    """
+    Service for processing uploaded documents.
+    
+    Supports multiple file formats:
+    - PDF: Extracts text from all pages using PyPDF
+    - Text files (.txt): Direct text extraction with UTF-8 decoding
+    
+    Processing workflow:
+    1. Validate file type
+    2. Extract text content from the file
+    3. Split text into overlapping chunks for better context preservation
+    4. Generate embeddings for each chunk
+    5. Store chunks with embeddings in pgvector database
+    
+    Chunk configuration (via environment variables):
+    - CHUNK_SIZE: Maximum characters per chunk (default: 1000)
+    - CHUNK_OVERLAP: Character overlap between consecutive chunks (default: 200)
+    
+    The overlap helps maintain context continuity across chunk boundaries.
+    """
     
     def process_pdf(self, file_content: bytes) -> str:
         """
