@@ -1,7 +1,7 @@
 # FastAPI and server dependencies
-fastapi==0.109.0
+fastapi==0.115.0
 uvicorn[standard]==0.27.0
-python-multipart==0.0.6
+python-multipart==0.0.18
 pydantic==2.5.3
 pydantic-settings==2.1.0
 
@@ -11,11 +11,11 @@ sqlalchemy==2.0.25
 pgvector==0.2.4
 
 # LangChain and AI dependencies
-langchain==0.1.4
-langchain-openai==0.0.5
-langchain-google-genai==0.0.6
-langchain-anthropic==0.0.2
-langchain-community==0.0.16
+langchain==0.3.27
+langchain-openai==0.2.14
+langchain-google-genai==2.0.8
+langchain-anthropic==0.3.11
+langchain-community==0.3.27
 
 # Document processing
 pypdf==4.0.0
