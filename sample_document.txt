@@ -1,0 +1,31 @@
+Welcome to the AI Chatbot Documentation
+
+This is a sample text document that can be uploaded to the AI chatbot for testing the RAG (Retrieval Augmented Generation) functionality.
+
+About the AI Chatbot:
+The AI Chatbot is a sophisticated backend API that allows users to interact with an intelligent assistant. The chatbot can answer questions, provide information, and help with various tasks.
+
+Key Features:
+1. Intelligent Conversations - The chatbot uses advanced language models to understand and respond to user queries.
+2. Document Context - Users can upload documents (PDF or TXT) to provide additional context.
+3. Session Management - All conversations are organized by sessions, keeping your chats separate.
+4. Conversation History - The chatbot remembers the entire conversation history.
+5. Multiple LLM Support - Works with OpenAI, Google Gemini, and Anthropic Claude.
+
+How it Works:
+When you upload a document, the system breaks it down into smaller chunks and creates vector embeddings. When you ask a question, the system finds the most relevant chunks from your uploaded documents and uses them along with the conversation history to generate contextual responses.
+
+Technical Details:
+- Built with FastAPI for high performance
+- Uses PostgreSQL with pgvector for efficient vector storage
+- Implements RAG using LangChain
+- Supports multiple language model providers
+- Fully containerized with Docker
+
+Example Use Cases:
+- Upload a research paper and ask questions about it
+- Upload product documentation and get instant answers
+- Upload meeting notes and query specific details
+- Upload a book chapter and discuss its contents
+
+This document serves as a test file to demonstrate the RAG capabilities of the chatbot.

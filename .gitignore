@@ -44,11 +44,8 @@ Thumbs.db
 *.db
 *.sqlite3
 
-# Uploads
+# Uploads (keep sample_document.txt)
 uploads/
-*.pdf
-*.txt
-*.docx
 
 # Logs
 *.log
