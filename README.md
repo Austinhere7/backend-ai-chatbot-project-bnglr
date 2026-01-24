@@ -6,7 +6,7 @@ A production-ready backend API for an AI chatbot with Retrieval Augmented Genera
 
 ## Features
 
-- 🤖 **AI-Powered Chat**: Intelligent conversations using state-of-the-art language models
+- 🤖 **AI-Powered Chat**: Intelligent conversations using state-of-the-art language modelss
 - 📄 **Document Upload**: Support for PDF and TXT files to provide additional context
 - 🔍 **RAG (Retrieval Augmented Generation)**: Uses uploaded documents to enhance responses
 - 💬 **Conversation History**: Maintains full chat history for contextual responses
