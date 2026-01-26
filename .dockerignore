@@ -1,0 +1,55 @@
+# Virtual Environments
+.venv
+venv
+env
+ENV
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.egg-info
+.Python
+build/
+dist/
+
+# IDE & Editor
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+
+# Documentation
+*.md
+docs/
+
+# Testing
+.pytest_cache
+.coverage
+
+# Logs
+logs/
+*.log
+
+# Node modules (if any)
+node_modules/
+
+# Docker
+docker-compose.override.yml
+.dockerignore
+
+# Local database files
+*.db
+*.sqlite3
+
+# Uploads
+uploads/

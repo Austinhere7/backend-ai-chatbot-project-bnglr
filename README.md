@@ -1,23 +1,21 @@
 # AI Chatbot Backend with RAG
 
-A production-ready backend API for an AI chatbot with Retrieval Augmented Generation (RAG) capabilities. The chatbot allows users to upload documents for additional context and maintains conversation history across sessions.
+An intelligent chatbot backend that lets you have conversations powered by AI, with the ability to upload documents for better context. Built with FastAPI, LangChain, and PostgreSQL.
 
 ![Architecture](architecture.svg)
 
-## Features
+## What Can It Do?
 
-- 🤖 **AI-Powered Chat**: Intelligent conversations using state-of-the-art language modelss
-- 📄 **Document Upload**: Support for PDF and TXT files to provide additional context
-- 🔍 **RAG (Retrieval Augmented Generation)**: Uses uploaded documents to enhance responses
-- 💬 **Conversation History**: Maintains full chat history for contextual responses
-- 🎯 **Session Management**: Segregate conversations and documents by session
-- 🔌 **Multiple LLM Providers**: Support for OpenAI, Google Gemini, and Anthropic Claude
-- 🐳 **Docker Support**: One-command deployment with docker-compose
-- 🗄️ **PostgreSQL with pgvector**: Efficient vector storage and similarity search
+- 💬 **Smart Conversations**: Chat with AI models from OpenAI, Google, or Anthropic
+- 📄 **Document Understanding**: Upload PDFs or text files and ask questions about them
+- 🧠 **Context-Aware**: The bot remembers your conversation and uses it for better responses
+- 🔄 **Session Management**: Keep different conversations separate with unique sessions
+- 🚀 **Easy Setup**: Get everything running with just one Docker command
+- 🔍 **Vector Search**: Uses embeddings and pgvector for smart document retrieval
 
-## Architecture
+## How It's Built
 
-The application follows a clean, modular architecture:
+Here's the basic flow of the application:
 
 ```
 ┌─────────────┐
@@ -59,77 +57,77 @@ The application follows a clean, modular architecture:
 └───────────────────────────┘
 ```
 
-## System Requirements
+## What You'll Need
 
-- **Docker & Docker Compose** (recommended)
-  - Docker Engine 20.10+
-  - Docker Compose 2.0+
+**Easiest way (Docker):**
+- Docker Desktop or Docker Engine 20.10+
+- Docker Compose 2.0+
 
-OR for local setup:
+**Or if you prefer local setup:**
+- Python 3.11 or higher
+- PostgreSQL 14+ with the pgvector extension
+- pip for installing Python packages
 
-- **Python 3.11+**
-- **PostgreSQL 14+** with **pgvector** extension
-- **pip** (Python package manager)
+## Getting Started (The Easy Way - Docker)
 
-## Quick Start with Docker (Recommended)
-
-### 1. Clone the Repository
+### Step 1: Grab the Code
 
 ```bash
 git clone https://github.com/Austinhere7/backend-ai-chatbot-project-bnglr.git
 cd backend-ai-chatbot-project-bnglr
 ```
 
-### 2. Configure Environment Variables
+### Step 2: Set Up Your API Keys
 
-Copy the example environment file and configure your API keys:
+First, create your environment file:
 
 ```bash
 cp .env.example .env
 ```
 
-Edit `.env` file with your preferred text editor:
+Then open the `.env` file in any text editor and add your API key:
 
 ```bash
-nano .env  # or vim .env, or any editor
+nano .env  # or use notepad, vim, whatever you like
 ```
 
-**Required Configuration:**
+**Here's what you need to configure:**
 
 ```env
-# Choose your LLM provider: openai, gemini, or anthropic
-LLM_PROVIDER=openai
+# Pick which AI service you want to use
+LLM_PROVIDER=openai  # can be: openai, gemini, or anthropic
+LLM_PROVIDER=openai  # can be: openai, gemini, or anthropic
 
-# Add the API key for your chosen provider
-OPENAI_API_KEY=sk-your-openai-api-key-here
-# OR
-GOOGLE_API_KEY=your-google-api-key-here
-# OR
-ANTHROPIC_API_KEY=your-anthropic-api-key-here
+# Then add your API key (only need one based on what you picked above)
+OPENAI_API_KEY=sk-your-key-here
+# GOOGLE_API_KEY=your-key-here  
+# ANTHROPIC_API_KEY=your-key-here
 ```
 
-### 3. Start the Application
+### Step 3: Fire It Up!
+
+This is where the magic happens. One command does it all:
 
 ```bash
 docker-compose up
 ```
 
-This single command will:
-- Start PostgreSQL database with pgvector extension
-- Initialize the database schema
-- Start the backend API server
+Wait for it to finish (first time takes a while as it downloads everything). You'll know it's ready when you see:
+```
+chatbot_backend  | INFO:     Uvicorn running on http://0.0.0.0:8000
+```
 
-The API will be available at: **http://localhost:8000**
+Your chatbot is now live at **http://localhost:8000**! 🎉
 
-### 4. Verify Installation
+### Step 4: Make Sure It's Working
 
-Open your browser or use curl:
+Quick test in your browser or terminal:
 
 ```bash
 curl http://localhost:8000
 ```
 
-You should see:
+You should get back something like:
 ```json
 {
   "message": "AI Chatbot API is running",
@@ -138,18 +136,18 @@ You should see:
 }
 ```
 
-## Local Setup (Without Docker)
+## Setting Up Locally (Without Docker)
+
+If you prefer running things directly on your machine, here's how.
 
 ### 1. Install PostgreSQL with pgvector
 
-**On Ubuntu/Debian:**
+**Ubuntu/Debian:**
 ```bash
 sudo apt-get update
 sudo apt-get install postgresql postgresql-contrib
-```
 
-**Install pgvector extension:**
-```bash
+# Install pgvector extension
 cd /tmp
 git clone --branch v0.5.1 https://github.com/pgvector/pgvector.git
 cd pgvector
@@ -157,25 +155,25 @@ make
 sudo make install
 ```
 
-**On macOS (with Homebrew):**
+**macOS (using Homebrew):**
 ```bash
 brew install postgresql
 brew install pgvector
 ```
 
-### 2. Create Database
+### 2. Set Up the Database
 
 ```bash
 # Start PostgreSQL
-sudo service postgresql start  # Ubuntu/Debian
-# OR
-brew services start postgresql  # macOS
+sudo service postgresql start  # Linux
+# or
+brew services start postgresql  # Mac
 
-# Create database and user
+# Create your database
 sudo -u postgres psql
 ```
 
-In PostgreSQL prompt:
+In the PostgreSQL prompt, run:
 ```sql
 CREATE DATABASE chatbot_db;
 CREATE USER chatbot_user WITH PASSWORD 'chatbot_password';
@@ -183,336 +181,308 @@ GRANT ALL PRIVILEGES ON DATABASE chatbot_db TO chatbot_user;
 \q
 ```
 
-### 3. Clone and Setup
+### 3. Install the Application
 
 ```bash
 git clone https://github.com/Austinhere7/backend-ai-chatbot-project-bnglr.git
 cd backend-ai-chatbot-project-bnglr
 
-# Create virtual environment
+# Set up a virtual environment (keeps things clean)
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate  # Windows: venv\Scripts\activate
 
-# Install dependencies
+# Install everything you need
 pip install -r requirements.txt
 ```
 
-### 4. Configure Environment
+### 4. Configure Your Settings
 
 ```bash
 cp .env.example .env
-# Edit .env with your API keys and database credentials
+# Edit .env with your API keys and database settings
 ```
 
-### 5. Initialize Database
+### 5. Initialize the Database
 
 ```bash
 python init_db.py
 ```
 
-### 6. Run the Application
+### 6. Start the Server
 
 ```bash
 python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-The API will be available at: **http://localhost:8000**
+Your API is now running at **http://localhost:8000**
 
-## API Documentation
+## Time to Play! Testing Your Chatbot
 
-Once the server is running, access the interactive API documentation:
+### The Easiest Way: Use the Built-in Interface
 
-- **Swagger UI**: http://localhost:8000/docs
-- **ReDoc**: http://localhost:8000/redoc
+Once your server is running, just open **http://localhost:8000/docs** in your browser. You'll see a nice interactive interface where you can test everything.
 
-## API Endpoints
+#### Let's Create a Chat Session
 
-### 1. Create Session
+1. Look for **POST /api/sessions/** in the docs page
+2. Click it, then click **"Try it out"**
+3. Hit **"Execute"**
+4. Copy the `session_id` you get back - you'll need it!
 
-Create a new chat session:
+Example response:
+```json
+{
+  "session_id": "550e8400-e29b-41d4-a716-446655440000",
+  "created_at": "2024-01-24T10:30:00.000Z"
+}
+```
 
+#### Now Chat With the AI!
+
+1. Find **POST /api/chat/**
+2. Click **"Try it out"**
+3. Paste this in the request body (use your own session_id):
+   ```json
+   {
+     "session_id": "your-session-id-here",
+     "message": "Hi! Can you explain what machine learning is?"
+   }
+   ```
+4. Click **"Execute"**
+5. Watch the AI respond!
+
+#### Want to Upload a Document?
+
+1. Go to **POST /api/documents/upload**
+2. Click **"Try it out"**
+3. Enter your `session_id`
+4. Choose a PDF or text file
+5. Click **"Execute"**
+
+Now you can ask questions about your document, and the bot will use it for context!
+
+#### Check Your Conversation History
+
+1. Find **GET /api/sessions/{session_id}/messages**
+2. Click **"Try it out"**
+3. Paste your `session_id`
+4. Click **"Execute"**
+
+You'll see your entire conversation!
+
+### Using Command Line? Here's How
+
+If you're more comfortable with the terminal, here are the commands:
+
+#### Create a Session
 ```bash
 curl -X POST http://localhost:8000/api/sessions/ \
   -H "Content-Type: application/json" \
   -d '{}'
 ```
 
-Response:
-```json
-{
-  "session_id": "550e8400-e29b-41d4-a716-446655440000",
-  "created_at": "2024-01-24T10:30:00.000Z",
-  "message_count": 0,
-  "document_count": 0
-}
-```
-
-### 2. Upload Document
-
-Upload a document for context (PDF or TXT):
-
+#### Upload a Document
 ```bash
 curl -X POST http://localhost:8000/api/documents/upload \
-  -F "session_id=550e8400-e29b-41d4-a716-446655440000" \
-  -F "file=@/path/to/document.pdf"
+  -F "session_id=YOUR_SESSION_ID" \
+  -F "file=@/path/to/your/document.pdf"
 ```
 
-Response:
-```json
-{
-  "session_id": "550e8400-e29b-41d4-a716-446655440000",
-  "filename": "document.pdf",
-  "file_type": "pdf",
-  "chunks_created": 15,
-  "message": "Document uploaded and processed successfully"
-}
-```
-
-### 3. Chat
-
-Send a message to the chatbot:
-
+#### Send a Message
 ```bash
 curl -X POST http://localhost:8000/api/chat/ \
   -H "Content-Type: application/json" \
   -d '{
-    "session_id": "550e8400-e29b-41d4-a716-446655440000",
-    "message": "What is mentioned in the document about AI?"
+    "session_id": "YOUR_SESSION_ID",
+    "message": "What does the document say about AI?"
   }'
 ```
 
-Response:
-```json
-{
-  "session_id": "550e8400-e29b-41d4-a716-446655440000",
-  "user_message": "What is mentioned in the document about AI?",
-  "assistant_message": "Based on the document you uploaded...",
-  "created_at": "2024-01-24T10:35:00.000Z"
-}
-```
-
-### 4. Get Conversation History
-
-Retrieve chat history for a session:
-
+#### Get Chat History
 ```bash
-curl http://localhost:8000/api/sessions/550e8400-e29b-41d4-a716-446655440000/history
+curl http://localhost:8000/api/sessions/YOUR_SESSION_ID/messages
 ```
 
-## Configuration
+### Using PowerShell (Windows)
 
-### Environment Variables
+```powershell
+# Create a session
+$response = Invoke-RestMethod -Method Post -Uri "http://localhost:8000/api/sessions/" -ContentType "application/json"
+$sessionId = $response.session_id
 
-| Variable | Description | Required | Default |
-|----------|-------------|----------|---------|
-| `DATABASE_URL` | PostgreSQL connection string | Yes | `postgresql://chatbot_user:chatbot_password@localhost:5432/chatbot_db` |
-| `LLM_PROVIDER` | LLM provider (openai/gemini/anthropic) | Yes | `openai` |
-| `OPENAI_API_KEY` | OpenAI API key | If using OpenAI | - |
-| `GOOGLE_API_KEY` | Google API key for Gemini | If using Gemini | - |
-| `ANTHROPIC_API_KEY` | Anthropic API key | If using Anthropic | - |
-| `APP_HOST` | Server host | No | `0.0.0.0` |
-| `APP_PORT` | Server port | No | `8000` |
-| `EMBEDDING_MODEL` | Sentence transformer model | No | `all-MiniLM-L6-v2` |
-| `CHUNK_SIZE` | Document chunk size | No | `1000` |
-| `CHUNK_OVERLAP` | Chunk overlap size | No | `200` |
+# Send a message
+$body = @{
+    session_id = $sessionId
+    message = "Tell me about quantum computing"
+} | ConvertTo-Json
 
-### Supported LLM Providers
-
-#### OpenAI
-```env
-LLM_PROVIDER=openai
-OPENAI_API_KEY=sk-...
+$chatResponse = Invoke-RestMethod -Method Post -Uri "http://localhost:8000/api/chat/" -ContentType "application/json" -Body $body
+Write-Host $chatResponse.assistant_message
 ```
-- Get API key: https://platform.openai.com/api-keys
 
-#### Google Gemini
-```env
-LLM_PROVIDER=gemini
-GOOGLE_API_KEY=...
+### Testing with Python
+
+Want to write a quick script? Here's a starter:
+
+```python
+import requests
+
+BASE_URL = "http://localhost:8000"
+
+# Create a session
+session = requests.post(f"{BASE_URL}/api/sessions/").json()
+session_id = session["session_id"]
+
+# Chat with the bot
+response = requests.post(
+    f"{BASE_URL}/api/chat/",
+    json={"session_id": session_id, "message": "What is AI?"}
+)
+print(response.json()["assistant_message"])
 ```
-- Get API key: https://makersuite.google.com/app/apikey
 
-#### Anthropic Claude
-```env
-LLM_PROVIDER=anthropic
-ANTHROPIC_API_KEY=...
+## How Does It Actually Work?
+
+When you send a message, here's what happens behind the scenes:
+
+1. **You create a session** - This keeps your conversations organized
+2. **You upload documents** (optional) - They get split into chunks and converted to embeddings
+3. **You send a message** - The system searches for relevant document chunks
+4. **Context building** - Your chat history + relevant document chunks are combined
+5. **AI generates response** - The LLM uses all this context to give you a smart answer
+6. **Everything gets saved** - Your messages are stored for future context
+
+It's called RAG (Retrieval Augmented Generation) - fancy term for "AI with better memory and context"!
+
+## Running Into Issues?
+
+### "Connection refused"
+- Make sure Docker is running: `docker-compose ps`
+- Check if something else is using port 8000
+
+### "Database won't connect"
+- Give PostgreSQL a few seconds to start up
+- Check logs: `docker-compose logs chatbot_db`
+
+### "API key not working"
+- Double-check your `.env` file
+- Make sure you're using the right key for the provider you selected
+- Verify you have API credits left
+
+### "Document upload failed"
+- Currently supports PDF and TXT files only
+- Keep files under 10MB for best results
+- Make sure you're using a valid session_id
+
+### Want to see what's happening?
+```bash
+# Watch logs in real-time
+docker-compose logs -f
+
+# Just the backend
+docker-compose logs chatbot_backend
+
+# Just the database
+docker-compose logs chatbot_db
 ```
-- Get API key: https://console.anthropic.com/
 
-## Project Structure
+## Configuration Options
+
+You can customize these in your `.env` file:
+
+| Setting | What It Does | Required? | Default |
+|---------|-------------|-----------|---------|
+| `DATABASE_URL` | Where to find your PostgreSQL database | Yes | `postgresql://chatbot_user:chatbot_password@localhost:5432/chatbot_db` |
+| `LLM_PROVIDER` | Which AI service to use (openai, gemini, or anthropic) | Yes | `openai` |
+| `OPENAI_API_KEY` | Your OpenAI API key | Only if using OpenAI | - |
+| `GOOGLE_API_KEY` | Your Google API key for Gemini | Only if using Gemini | - |
+| `ANTHROPIC_API_KEY` | Your Anthropic API key for Claude | Only if using Anthropic | - |
+| `APP_HOST` | What address to run the server on | No | `0.0.0.0` |
+| `APP_PORT` | What port to use | No | `8000` |
+| `EMBEDDING_MODEL` | Which model to use for embeddings | No | `all-MiniLM-L6-v2` |
+| `CHUNK_SIZE` | How many characters per document chunk | No | `1000` |
+| `CHUNK_OVERLAP` | How much chunks should overlap | No | `200` |
+
+### Getting API Keys
+
+**OpenAI:**
+- Sign up at https://platform.openai.com/
+- Go to https://platform.openai.com/api-keys
+- Create a new key
+
+**Google Gemini:**
+- Visit https://makersuite.google.com/app/apikey
+- Create an API key
+
+**Anthropic Claude:**
+- Head to https://console.anthropic.com/
+- Generate an API key
+
+## What's Inside? Project Structure
 
 ```
 backend-ai-chatbot-project-bnglr/
 ├── app/
-│   ├── api/                    # API endpoints
-│   │   ├── chat.py            # Chat endpoint
-│   │   ├── documents.py       # Document upload endpoint
-│   │   └── sessions.py        # Session management endpoints
-│   ├── config/                # Configuration
-│   │   ├── database.py        # Database setup
+│   ├── api/                    # All the API endpoints
+│   │   ├── chat.py            # Handles chat messages
+│   │   ├── documents.py       # Handles file uploads
+│   │   └── sessions.py        # Manages sessions
+│   ├── config/                # Configuration stuff
+│   │   ├── database.py        # Database connection
 │   │   └── settings.py        # App settings
 │   ├── models/                # Data models
-│   │   ├── models.py          # SQLAlchemy models
-│   │   └── schemas.py         # Pydantic schemas
-│   ├── services/              # Business logic
-│   │   ├── llm_service.py     # LLM integration
-│   │   ├── embedding_service.py # Embeddings
-│   │   ├── document_service.py  # Document processing
-│   │   └── rag_service.py     # RAG implementation
-│   └── main.py                # FastAPI application
-├── init_db.py                 # Database initialization
-├── requirements.txt           # Python dependencies
-├── Dockerfile                 # Docker image definition
-├── docker-compose.yml         # Docker orchestration
-├── .env.example              # Example environment variables
-├── .gitignore                # Git ignore rules
-└── README.md                 # This file
+│   │   ├── models.py          # Database tables
+│   │   └── schemas.py         # API request/response formats
+│   ├── services/              # The business logic
+│   │   ├── llm_service.py     # Talks to AI services
+│   │   ├── embedding_service.py # Creates embeddings
+│   │   ├── document_service.py  # Processes documents
+│   │   └── rag_service.py     # RAG magic happens here
+│   └── main.py                # The main app
+├── init_db.py                 # Sets up the database
+├── requirements.txt           # Python packages needed
+├── Dockerfile                 # How to build the Docker image
+├── docker-compose.yml         # Orchestrates everything
+├── .env.example              # Example environment file
+└── README.md                 # You're reading it!
 ```
 
-## Database Schema
+## The Database Tables
 
-### Sessions Table
-- `id`: Primary key
-- `session_id`: Unique session identifier
-- `created_at`: Timestamp
-- `updated_at`: Timestamp
+**sessions** - Keeps track of different conversations
+- Each session gets a unique ID
+- Timestamps for when it was created/updated
 
-### Messages Table
-- `id`: Primary key
-- `session_id`: Foreign key to sessions
-- `role`: 'user' or 'assistant'
-- `content`: Message text
-- `created_at`: Timestamp
+**messages** - All the chat messages
+- Links to a session
+- Stores who said it (user or AI)
+- The actual message content
 
-### Documents Table
-- `id`: Primary key
-- `session_id`: Foreign key to sessions
-- `filename`: Original filename
-- `file_type`: File type (pdf/txt)
-- `content`: Full document text
-- `created_at`: Timestamp
+**documents** - Files you've uploaded
+- Associated with a session
+- Original filename and type
+- The full text content
 
-### Document_Chunks Table
-- `id`: Primary key
-- `document_id`: Foreign key to documents
-- `chunk_text`: Text chunk
-- `chunk_index`: Chunk position
-- `embedding`: Vector embedding (384 dimensions)
+**document_chunks** - Document pieces with embeddings
+- Each chunk from a document
+- The text chunk itself
+- Vector embedding for similarity search
 
-## Testing
+## Need Help?
 
-### Health Check
+If you run into any issues:
+- Check the [Troubleshooting](#running-into-issues) section above
+- Look at the logs: `docker-compose logs -f`
+- Make sure your API keys are set up correctly
+- Verify Docker is running if using Docker
 
-```bash
-curl http://localhost:8000/health
-```
+## Built With
 
-### Full Workflow Test
-
-```bash
-# 1. Create session
-SESSION_ID=$(curl -s -X POST http://localhost:8000/api/sessions/ \
-  -H "Content-Type: application/json" -d '{}' | jq -r '.session_id')
-
-echo "Session ID: $SESSION_ID"
-
-# 2. Upload a document
-curl -X POST http://localhost:8000/api/documents/upload \
-  -F "session_id=$SESSION_ID" \
-  -F "file=@sample.txt"
-
-# 3. Chat with the bot
-curl -X POST http://localhost:8000/api/chat/ \
-  -H "Content-Type: application/json" \
-  -d "{
-    \"session_id\": \"$SESSION_ID\",
-    \"message\": \"What is in the document?\"
-  }"
-
-# 4. Get conversation history
-curl http://localhost:8000/api/sessions/$SESSION_ID/history
-```
-
-## Troubleshooting
-
-### Docker Issues
-
-**Database connection errors:**
-```bash
-# Check if database is running
-docker-compose ps
-
-# View database logs
-docker-compose logs db
-
-# Restart services
-docker-compose down
-docker-compose up
-```
-
-**Port already in use:**
-```bash
-# Change port in docker-compose.yml or stop conflicting service
-sudo lsof -i :8000  # Find process using port 8000
-```
-
-### Local Setup Issues
-
-**pgvector not found:**
-```bash
-# Ensure pgvector is properly installed
-sudo -u postgres psql -d chatbot_db -c "CREATE EXTENSION vector;"
-```
-
-**Module import errors:**
-```bash
-# Ensure virtual environment is activated
-source venv/bin/activate
-
-# Reinstall dependencies
-pip install -r requirements.txt
-```
-
-**Database connection errors:**
-- Verify PostgreSQL is running: `sudo service postgresql status`
-- Check credentials in `.env` file
-- Ensure database exists: `sudo -u postgres psql -l`
-
-## Development
-
-### Adding New Features
-
-1. **New API Endpoint**: Add to `app/api/`
-2. **New Model**: Update `app/models/models.py`
-3. **New Service**: Add to `app/services/`
-
-### Code Style
-
-- Follow PEP 8 guidelines
-- Use type hints
-- Add docstrings to all functions
-- Keep functions focused and modular
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+- [FastAPI](https://fastapi.tiangolo.com/) - The web framework
+- [LangChain](https://www.langchain.com/) - For working with LLMs
+- [pgvector](https://github.com/pgvector/pgvector) - Vector database extension
+- [Sentence Transformers](https://www.sbert.net/) - For creating embeddings
 
 ## License
 
-MIT License - See LICENSE file for details
-
-## Support
-
-For issues and questions:
-- GitHub Issues: https://github.com/Austinhere7/backend-ai-chatbot-project-bnglr/issues
-
-## Acknowledgments
-
-- Built with [FastAPI](https://fastapi.tiangolo.com/)
-- Powered by [LangChain](https://www.langchain.com/)
-- Vector storage by [pgvector](https://github.com/pgvector/pgvector)
-- Embeddings by [Sentence Transformers](https://www.sbert.net/)
+MIT License - feel free to use this however you'd like!
