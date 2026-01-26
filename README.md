@@ -96,7 +96,6 @@ nano .env  # or use notepad, vim, whatever you like
 ```env
 # Pick which AI service you want to use
 LLM_PROVIDER=openai  # can be: openai, gemini, or anthropic
-LLM_PROVIDER=openai  # can be: openai, gemini, or anthropic
 
 # Then add your API key (only need one based on what you picked above)
 OPENAI_API_KEY=sk-your-key-here
