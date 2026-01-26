@@ -12,13 +12,8 @@ class Settings(BaseSettings):
     # Database configuration
     DATABASE_URL: str = "postgresql://chatbot_user:chatbot_password@localhost:5432/chatbot_db"
     
-    # LLM Provider configuration
-    LLM_PROVIDER: str = "openai"  # Options: openai, gemini, anthropic
-    
-    # API Keys for different providers
+    # OpenAI API Key
     OPENAI_API_KEY: Optional[str] = None
-    GOOGLE_API_KEY: Optional[str] = None
-    ANTHROPIC_API_KEY: Optional[str] = None
     
     # Application configuration
     APP_HOST: str = "0.0.0.0"

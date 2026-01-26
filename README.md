@@ -6,7 +6,7 @@ An intelligent chatbot backend that lets you have conversations powered by AI, w
 
 ## What Can It Do?
 
-- 💬 **Smart Conversations**: Chat with AI models from OpenAI, Google, or Anthropic
+- 💬 **Smart Conversations**: Chat with OpenAI's GPT models
 - 📄 **Document Understanding**: Upload PDFs or text files and ask questions about them
 - 🧠 **Context-Aware**: The bot remembers your conversation and uses it for better responses
 - 🔄 **Session Management**: Keep different conversations separate with unique sessions
@@ -42,8 +42,7 @@ Here's the basic flow of the application:
 │            ▼                        │
 │  ┌─────────────────┐               │
 │  │   LLM Service   │               │
-│  │ (OpenAI/Gemini/ │               │
-│  │   Anthropic)    │               │
+│  │   (OpenAI)      │               │
 │  └─────────────────┘               │
 └─────────┬───────────────────────────┘
           │
@@ -94,13 +93,8 @@ nano .env  # or use notepad, vim, whatever you like
 **Here's what you need to configure:**
 
 ```env
-# Pick which AI service you want to use
-LLM_PROVIDER=openai  # can be: openai, gemini, or anthropic
-
-# Then add your API key (only need one based on what you picked above)
+# Add your OpenAI API key
 OPENAI_API_KEY=sk-your-key-here
-# GOOGLE_API_KEY=your-key-here  
-# ANTHROPIC_API_KEY=your-key-here
 ```
 
 ### Step 3: Fire It Up!
@@ -217,16 +211,25 @@ Your API is now running at **http://localhost:8000**
 
 ## Time to Play! Testing Your Chatbot
 
-### The Easiest Way: Use the Built-in Interface
+There are **two ways** to test your chatbot. Pick whichever you prefer! 👇
 
-Once your server is running, just open **http://localhost:8000/docs** in your browser. You'll see a nice interactive interface where you can test everything.
+---
 
-#### Let's Create a Chat Session
+## 🌐 Method 1: Interactive API Documentation (Easiest!)
 
-1. Look for **POST /api/sessions/** in the docs page
-2. Click it, then click **"Try it out"**
-3. Hit **"Execute"**
-4. Copy the `session_id` you get back - you'll need it!
+This is the most beginner-friendly way. No command line needed!
+
+**Step 1: Open the Interactive Docs**
+- Just visit: **http://localhost:8000/docs** in your browser
+- You'll see a beautiful interface with all API endpoints listed
+
+**Step 2: Create a Chat Session**
+
+1. Scroll down and find **POST /api/sessions/**
+2. Click on it to expand it
+3. Click the blue **"Try it out"** button
+4. Click the big **"Execute"** button (no parameters needed)
+5. Scroll down to see the response with your `session_id`
 
 Example response:
 ```json
@@ -236,108 +239,247 @@ Example response:
 }
 ```
 
-#### Now Chat With the AI!
+**💾 Copy your session_id - you'll need it for everything else!**
+
+**Step 3: Send a Chat Message**
 
 1. Find **POST /api/chat/**
 2. Click **"Try it out"**
-3. Paste this in the request body (use your own session_id):
+3. In the request body box, paste this (use YOUR session_id):
    ```json
    {
-     "session_id": "your-session-id-here",
+     "session_id": "550e8400-e29b-41d4-a716-446655440000",
      "message": "Hi! Can you explain what machine learning is?"
    }
    ```
 4. Click **"Execute"**
-5. Watch the AI respond!
+5. See the AI's response below!
 
-#### Want to Upload a Document?
+**Step 4: Upload a Document (Optional)**
 
-1. Go to **POST /api/documents/upload**
+1. Find **POST /api/documents/upload**
 2. Click **"Try it out"**
-3. Enter your `session_id`
-4. Choose a PDF or text file
+3. In the `session_id` field, paste your session ID
+4. In the `file` field, click "Choose Files" and pick a PDF or text file
 5. Click **"Execute"**
 
-Now you can ask questions about your document, and the bot will use it for context!
+Now your chatbot has context from your document!
 
-#### Check Your Conversation History
+**Step 5: Chat About Your Document**
 
-1. Find **GET /api/sessions/{session_id}/messages**
+1. Go back to **POST /api/chat/**
 2. Click **"Try it out"**
-3. Paste your `session_id`
+3. Paste this (with YOUR session_id):
+   ```json
+   {
+     "session_id": "550e8400-e29b-41d4-a716-446655440000",
+     "message": "What is the main topic in the document I just uploaded?"
+   }
+   ```
 4. Click **"Execute"**
 
-You'll see your entire conversation!
+The AI will answer based on your document!
 
-### Using Command Line? Here's How
+**Step 6: View Your Chat History**
 
-If you're more comfortable with the terminal, here are the commands:
+1. Find **GET /api/sessions/{session_id}/history**
+2. Click **"Try it out"**
+3. Paste your session_id in the field
+4. Click **"Execute"**
 
-#### Create a Session
+You'll see all your messages from this session!
+
+---
+
+## 💻 Method 2: Command Line Testing
+
+Prefer the terminal? Here's how to do everything with `curl` commands.
+
+### On Linux/macOS:
+
+**Create a Session:**
 ```bash
 curl -X POST http://localhost:8000/api/sessions/ \
   -H "Content-Type: application/json" \
   -d '{}'
 ```
 
-#### Upload a Document
-```bash
-curl -X POST http://localhost:8000/api/documents/upload \
-  -F "session_id=YOUR_SESSION_ID" \
-  -F "file=@/path/to/your/document.pdf"
-```
-
-#### Send a Message
+**Send a Message:**
 ```bash
 curl -X POST http://localhost:8000/api/chat/ \
   -H "Content-Type: application/json" \
   -d '{
-    "session_id": "YOUR_SESSION_ID",
-    "message": "What does the document say about AI?"
+    "session_id": "your-session-id-here",
+    "message": "Hello! What can you do?"
   }'
 ```
 
-#### Get Chat History
+**Upload a Document:**
 ```bash
-curl http://localhost:8000/api/sessions/YOUR_SESSION_ID/messages
+curl -X POST http://localhost:8000/api/documents/upload \
+  -F "session_id=your-session-id-here" \
+  -F "file=@sample_document.txt"
 ```
 
-### Using PowerShell (Windows)
+**Get Chat History:**
+```bash
+curl http://localhost:8000/api/sessions/your-session-id-here/history
+```
 
+**List All Sessions:**
+```bash
+curl http://localhost:8000/api/sessions/
+```
+
+**Delete a Session:**
+```bash
+curl -X DELETE http://localhost:8000/api/sessions/your-session-id-here
+```
+
+### On Windows PowerShell:
+
+**Create a Session:**
 ```powershell
-# Create a session
 $response = Invoke-RestMethod -Method Post -Uri "http://localhost:8000/api/sessions/" -ContentType "application/json"
 $sessionId = $response.session_id
-
-# Send a message
-$body = @{
-    session_id = $sessionId
-    message = "Tell me about quantum computing"
-} | ConvertTo-Json
-
-$chatResponse = Invoke-RestMethod -Method Post -Uri "http://localhost:8000/api/chat/" -ContentType "application/json" -Body $body
-Write-Host $chatResponse.assistant_message
+Write-Host "Session ID: $sessionId"
 ```
 
-### Testing with Python
+**Send a Message:**
+```powershell
+$body = @{
+    session_id = "your-session-id-here"
+    message = "Hello! What can you do?"
+} | ConvertTo-Json
 
-Want to write a quick script? Here's a starter:
+$response = Invoke-RestMethod -Method Post -Uri "http://localhost:8000/api/chat/" -ContentType "application/json" -Body $body
+Write-Host $response.assistant_message
+```
+
+**Upload a Document:**
+```powershell
+$filePath = "C:\path\to\your\document.txt"
+$sessionId = "your-session-id-here"
+
+$form = @{
+    session_id = $sessionId
+    file = Get-Item -Path $filePath
+}
+
+$response = Invoke-RestMethod -Method Post -Uri "http://localhost:8000/api/documents/upload" -Form $form
+Write-Host $response | ConvertTo-Json
+```
+
+**Get Chat History:**
+```powershell
+$sessionId = "your-session-id-here"
+$response = Invoke-RestMethod -Uri "http://localhost:8000/api/sessions/$sessionId/history"
+$response.messages | ForEach-Object { Write-Host "[$($_.role)] $($_.content)" }
+```
+
+### On Windows Command Prompt (cmd):
+
+**Create a Session:**
+```cmd
+curl -X POST http://localhost:8000/api/sessions/ -H "Content-Type: application/json" -d "{}"
+```
+
+**Send a Message:**
+```cmd
+curl -X POST http://localhost:8000/api/chat/ -H "Content-Type: application/json" -d "{ \"session_id\": \"your-session-id-here\", \"message\": \"Hello!\" }"
+```
+
+---
+
+## 🐍 Method 3: Python Script
+
+Write a Python script to automate testing:
 
 ```python
 import requests
 
 BASE_URL = "http://localhost:8000"
 
-# Create a session
-session = requests.post(f"{BASE_URL}/api/sessions/").json()
-session_id = session["session_id"]
+# 1. Create a session
+print("📝 Creating a chat session...")
+session_resp = requests.post(f"{BASE_URL}/api/sessions/")
+session_id = session_resp.json()["session_id"]
+print(f"✓ Session created: {session_id}\n")
 
-# Chat with the bot
-response = requests.post(
+# 2. Upload a document
+print("📄 Uploading a document...")
+with open("sample_document.txt", "rb") as f:
+    files = {"file": f}
+    data = {"session_id": session_id}
+    doc_resp = requests.post(f"{BASE_URL}/api/documents/upload", files=files, data=data)
+    if doc_resp.status_code == 200:
+        print("✓ Document uploaded successfully\n")
+    else:
+        print(f"✗ Upload failed: {doc_resp.text}\n")
+
+# 3. Send a message
+print("💬 Sending a message...")
+chat_resp = requests.post(
     f"{BASE_URL}/api/chat/",
-    json={"session_id": session_id, "message": "What is AI?"}
+    json={
+        "session_id": session_id,
+        "message": "What is the document about?"
+    }
 )
-print(response.json()["assistant_message"])
+response = chat_resp.json()
+print(f"You: {response['user_message']}")
+print(f"AI: {response['assistant_message']}\n")
+
+# 4. Get conversation history
+print("📜 Conversation history:")
+history_resp = requests.get(f"{BASE_URL}/api/sessions/{session_id}/history")
+messages = history_resp.json()["messages"]
+for msg in messages:
+    print(f"[{msg['role'].upper()}] {msg['content'][:80]}...")
+
+# 5. Clean up
+print("\n🗑️  Deleting session...")
+requests.delete(f"{BASE_URL}/api/sessions/{session_id}")
+print("✓ Session deleted")
+```
+
+Save this as `test_chatbot.py` and run it:
+```bash
+python test_chatbot.py
+```
+
+---
+
+## 📊 Complete API Endpoints Reference
+
+| Method | Endpoint | What It Does |
+|--------|----------|-------------|
+| `POST` | `/api/sessions/` | Create a new chat session |
+| `GET` | `/api/sessions/` | List all sessions |
+| `GET` | `/api/sessions/{session_id}` | Get details of a specific session |
+| `DELETE` | `/api/sessions/{session_id}` | Delete a session |
+| `GET` | `/api/sessions/{session_id}/history` | Get all messages in a session |
+| `POST` | `/api/chat/` | Send a message and get AI response |
+| `POST` | `/api/documents/upload` | Upload a document to a session |
+| `GET` | `/api/documents/list/{session_id}` | List all documents in a session |
+
+---
+
+## 🎯 Quick Testing Workflow
+
+### Using Interactive Docs (Recommended for beginners):
+1. Open http://localhost:8000/docs
+2. POST /api/sessions/ → Execute → Copy session_id
+3. POST /api/chat/ → Enter session_id & message → Execute
+4. See the response!
+
+### Using Command Line:
+```bash
+# Create session and save the ID
+curl -X POST http://localhost:8000/api/sessions/ -H "Content-Type: application/json" -d '{}' | grep -o '"session_id":"[^"]*' | cut -d'"' -f4
+
+# Use that ID in your next command
+curl -X POST http://localhost:8000/api/chat/ -H "Content-Type: application/json" -d '{"session_id": "YOUR_ID_HERE", "message": "Hello!"}'
 ```
 
 ## How Does It Actually Work?
@@ -392,10 +534,7 @@ You can customize these in your `.env` file:
 | Setting | What It Does | Required? | Default |
 |---------|-------------|-----------|---------|
 | `DATABASE_URL` | Where to find your PostgreSQL database | Yes | `postgresql://chatbot_user:chatbot_password@localhost:5432/chatbot_db` |
-| `LLM_PROVIDER` | Which AI service to use (openai, gemini, or anthropic) | Yes | `openai` |
-| `OPENAI_API_KEY` | Your OpenAI API key | Only if using OpenAI | - |
-| `GOOGLE_API_KEY` | Your Google API key for Gemini | Only if using Gemini | - |
-| `ANTHROPIC_API_KEY` | Your Anthropic API key for Claude | Only if using Anthropic | - |
+| `OPENAI_API_KEY` | Your OpenAI API key | Yes | - |
 | `APP_HOST` | What address to run the server on | No | `0.0.0.0` |
 | `APP_PORT` | What port to use | No | `8000` |
 | `EMBEDDING_MODEL` | Which model to use for embeddings | No | `all-MiniLM-L6-v2` |
@@ -408,14 +547,6 @@ You can customize these in your `.env` file:
 - Sign up at https://platform.openai.com/
 - Go to https://platform.openai.com/api-keys
 - Create a new key
-
-**Google Gemini:**
-- Visit https://makersuite.google.com/app/apikey
-- Create an API key
-
-**Anthropic Claude:**
-- Head to https://console.anthropic.com/
-- Generate an API key
 
 ## What's Inside? Project Structure
 
