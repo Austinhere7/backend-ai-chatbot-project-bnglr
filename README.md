@@ -598,21 +598,6 @@ backend-ai-chatbot-project-bnglr/
 - The text chunk itself
 - Vector embedding for similarity search
 
-## Need Help?
-
-If you run into any issues:
-- Check the [Troubleshooting](#running-into-issues) section above
-- Look at the logs: `docker-compose logs -f`
-- Make sure your API keys are set up correctly
-- Verify Docker is running if using Docker
-
-## Built With
-
-- [FastAPI](https://fastapi.tiangolo.com/) - The web framework
-- [LangChain](https://www.langchain.com/) - For working with LLMs
-- [pgvector](https://github.com/pgvector/pgvector) - Vector database extension
-- [Sentence Transformers](https://www.sbert.net/) - For creating embeddings
-
 ## License
 
 MIT License - feel free to use this however you'd like!
