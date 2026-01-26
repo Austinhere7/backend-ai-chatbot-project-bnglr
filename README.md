@@ -541,12 +541,6 @@ You can customize these in your `.env` file:
 | `CHUNK_SIZE` | How many characters per document chunk | No | `1000` |
 | `CHUNK_OVERLAP` | How much chunks should overlap | No | `200` |
 
-### Getting API Keys
-
-**OpenAI:**
-- Sign up at https://platform.openai.com/
-- Go to https://platform.openai.com/api-keys
-- Create a new key
 
 ## What's Inside? Project Structure
 
@@ -597,7 +591,3 @@ backend-ai-chatbot-project-bnglr/
 - Each chunk from a document
 - The text chunk itself
 - Vector embedding for similarity search
-
-## License
-
-MIT License - feel free to use this however you'd like!
