@@ -402,20 +402,6 @@ You can customize these in your `.env` file:
 | `CHUNK_SIZE` | How many characters per document chunk | No | `1000` |
 | `CHUNK_OVERLAP` | How much chunks should overlap | No | `200` |
 
-### Getting API Keys
-
-**OpenAI:**
-- Sign up at https://platform.openai.com/
-- Go to https://platform.openai.com/api-keys
-- Create a new key
-
-**Google Gemini:**
-- Visit https://makersuite.google.com/app/apikey
-- Create an API key
-
-**Anthropic Claude:**
-- Head to https://console.anthropic.com/
-- Generate an API key
 
 ## What's Inside? Project Structure
 
@@ -466,21 +452,6 @@ backend-ai-chatbot-project-bnglr/
 - Each chunk from a document
 - The text chunk itself
 - Vector embedding for similarity search
-
-## Need Help?
-
-If you run into any issues:
-- Check the [Troubleshooting](#running-into-issues) section above
-- Look at the logs: `docker-compose logs -f`
-- Make sure your API keys are set up correctly
-- Verify Docker is running if using Docker
-
-## Built With
-
-- [FastAPI](https://fastapi.tiangolo.com/) - The web framework
-- [LangChain](https://www.langchain.com/) - For working with LLMs
-- [pgvector](https://github.com/pgvector/pgvector) - Vector database extension
-- [Sentence Transformers](https://www.sbert.net/) - For creating embeddings
 
 ## License
 
