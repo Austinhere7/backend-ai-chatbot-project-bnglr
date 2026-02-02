@@ -7,7 +7,7 @@ pydantic-settings==2.5.0
 
 # Database
 psycopg2-binary==2.9.10
-sqlalchemy==2.0.25
+sqlalchemy==2.0.43
 pgvector==0.2.4
 
 # LangChain and AI dependencies

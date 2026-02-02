@@ -21,7 +21,7 @@ class LLMService:
     
     def __init__(self):
         """Initialize the LLM service with OpenAI."""
-        self.llm = self._initialize_llm()
+        self.llm = None
     
     def _initialize_llm(self):
         """
@@ -34,7 +34,7 @@ class LLMService:
             ValueError: If OPENAI_API_KEY is not set
         """
         if not settings.OPENAI_API_KEY:
-            raise ValueError("OPENAI_API_KEY is required. Please set it in your .env file.")
+            return None
         
         return ChatOpenAI(
             model="gpt-3.5-turbo",
@@ -49,6 +49,10 @@ class LLMService:
         Returns:
             LLM instance
         """
+        if self.llm is None:
+            self.llm = self._initialize_llm()
+        if self.llm is None:
+            raise ValueError("OPENAI_API_KEY is required. Please set it in your .env file.")
         return self.llm
 
 

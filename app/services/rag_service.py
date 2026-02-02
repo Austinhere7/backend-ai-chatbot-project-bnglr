@@ -29,7 +29,7 @@ class RAGService:
     
     def __init__(self):
         """Initialize RAG service."""
-        self.llm = llm_service.get_llm()
+        self.llm = None
         self.embedding_service = embedding_service
     
     def retrieve_relevant_chunks(
@@ -120,7 +120,10 @@ class RAGService:
             Generated response
         """
         # Retrieve relevant document chunks
-        relevant_chunks = self.retrieve_relevant_chunks(db, session_id, user_message)
+        try:
+            relevant_chunks = self.retrieve_relevant_chunks(db, session_id, user_message)
+        except Exception:
+            relevant_chunks = []
         
         # Get conversation history
         history = self.get_conversation_history(db, session_id)
@@ -154,10 +157,22 @@ Provide a helpful and accurate response based on the context and conversation hi
         # Add current user message
         messages.append(("human", user_message))
         
-        # Generate response using LLM
-        response = self.llm.invoke(messages)
-        
-        return response.content
+        # Generate response using LLM (with graceful fallback if unavailable)
+        try:
+            llm = llm_service.get_llm()
+            response = llm.invoke(messages)
+            return response.content
+        except Exception:
+            if context:
+                trimmed_context = context[:1000]
+                return (
+                    "Based on the uploaded documents, here is the most relevant information:\n\n"
+                    f"{trimmed_context}"
+                )
+            return (
+                "The language model is not configured right now. "
+                "Please set OPENAI_API_KEY in the .env file to enable full responses."
+            )
 
 
 # Global RAG service instance
