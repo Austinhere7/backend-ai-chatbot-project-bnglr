@@ -5,8 +5,7 @@ Implements the core chatbot logic with context retrieval and generation.
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from typing import List, Tuple
-from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain.schema import HumanMessage, AIMessage
+from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 from app.models.models import Message, DocumentChunk
 from app.services.llm_service import llm_service
 from app.services.embedding_service import embedding_service
@@ -73,13 +72,18 @@ class RAGService:
             LIMIT :top_k
         """)
         
-        result = db.execute(
-            sql_query,
-            {"embedding": embedding_str, "session_id": session_id, "top_k": top_k}
-        )
-        
-        chunks = [row[0] for row in result.fetchall()]
-        return chunks
+        try:
+            result = db.execute(
+                sql_query,
+                {"embedding": embedding_str, "session_id": session_id, "top_k": top_k}
+            )
+
+            chunks = [row[0] for row in result.fetchall()]
+            return chunks
+        except Exception:
+            # Ensure the failed transaction does not poison subsequent queries
+            db.rollback()
+            return []
     
     def get_conversation_history(self, db: Session, session_id: int, limit: int = 10) -> List[Tuple[str, str]]:
         """
@@ -144,24 +148,24 @@ Provide a helpful and accurate response based on the context and conversation hi
         else:
             system_message = "You are a helpful AI assistant. Provide accurate and helpful responses to user questions."
         
-        # Build message history for LangChain
-        messages = [("system", system_message)]
-        
+        # Build message history for LangChain using BaseMessage types
+        messages = [SystemMessage(content=system_message)]
+
         # Add conversation history
         for role, content in history:
             if role == "user":
-                messages.append(("human", content))
+                messages.append(HumanMessage(content=content))
             else:
-                messages.append(("assistant", content))
-        
+                messages.append(AIMessage(content=content))
+
         # Add current user message
-        messages.append(("human", user_message))
-        
+        messages.append(HumanMessage(content=user_message))
+
         # Generate response using LLM (with graceful fallback if unavailable)
         try:
             llm = llm_service.get_llm()
             response = llm.invoke(messages)
-            return response.content
+            return response.content if hasattr(response, "content") else str(response)
         except Exception:
             if context:
                 trimmed_context = context[:1000]

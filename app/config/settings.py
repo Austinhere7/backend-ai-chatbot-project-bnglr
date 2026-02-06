@@ -14,6 +14,13 @@ class Settings(BaseSettings):
     
     # OpenAI API Key
     OPENAI_API_KEY: Optional[str] = None
+
+    # LLM Provider configuration (for display and future extensibility)
+    LLM_PROVIDER: str = "openai"
+
+    # Optional API keys for other providers (kept for extensibility)
+    GOOGLE_API_KEY: Optional[str] = None
+    ANTHROPIC_API_KEY: Optional[str] = None
     
     # Application configuration
     APP_HOST: str = "0.0.0.0"
@@ -27,6 +34,7 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
         case_sensitive = True
+        extra = "ignore"
 
 
 # Global settings instance
