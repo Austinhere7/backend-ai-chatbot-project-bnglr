@@ -16,11 +16,14 @@ class Settings(BaseSettings):
     OPENAI_API_KEY: Optional[str] = None
 
     # LLM Provider configuration (for display and future extensibility)
-    LLM_PROVIDER: str = "openai"
+    LLM_PROVIDER: str = "gemini"
 
     # Optional API keys for other providers (kept for extensibility)
     GOOGLE_API_KEY: Optional[str] = None
     ANTHROPIC_API_KEY: Optional[str] = None
+
+    # Gemini model configuration
+    GEMINI_MODEL: str = "gemini-pro-latest"
     
     # Application configuration
     APP_HOST: str = "0.0.0.0"

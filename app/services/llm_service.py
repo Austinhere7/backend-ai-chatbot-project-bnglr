@@ -44,7 +44,7 @@ class LLMService:
             if not settings.GOOGLE_API_KEY:
                 raise ValueError("GOOGLE_API_KEY is required for Gemini provider.")
             return ChatGoogleGenerativeAI(
-                model="gemini-1.5-flash",
+                model=settings.GEMINI_MODEL,
                 temperature=0.7,
                 google_api_key=settings.GOOGLE_API_KEY,
             )
