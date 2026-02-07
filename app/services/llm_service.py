@@ -1,46 +1,55 @@
 """
 LLM service for managing language model interactions.
-Powered by OpenAI's GPT models.
+Supports multiple providers based on environment settings.
 """
 from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from app.config.settings import settings
 
 
 class LLMService:
     """
-    Service for managing language model interactions using OpenAI's API.
-    
-    Uses OpenAI's GPT-3.5-turbo model for conversational AI.
-    Requires OPENAI_API_KEY to be set in environment variables.
-    
-    Example usage:
-        from app.services.llm_service import llm_service
-        llm = llm_service.get_llm()
-        response = llm.invoke([("human", "Hello!")])
+    Service for managing language model interactions.
+
+    Provider selection is controlled by LLM_PROVIDER in the environment.
+    Supported providers: openai, gemini.
     """
     
     def __init__(self):
-        """Initialize the LLM service with OpenAI."""
+        """Initialize the LLM service."""
         self.llm = None
     
     def _initialize_llm(self):
         """
-        Initialize OpenAI language model.
-        
+        Initialize a provider-specific language model.
+
         Returns:
-            ChatOpenAI instance
-            
+            A Chat model instance
+
         Raises:
-            ValueError: If OPENAI_API_KEY is not set
+            ValueError: If required API key is missing or provider is unsupported
         """
-        if not settings.OPENAI_API_KEY:
-            return None
-        
-        return ChatOpenAI(
-            model="gpt-3.5-turbo",
-            temperature=0.7,
-            api_key=settings.OPENAI_API_KEY
-        )
+        provider = (settings.LLM_PROVIDER or "openai").lower()
+
+        if provider == "openai":
+            if not settings.OPENAI_API_KEY:
+                raise ValueError("OPENAI_API_KEY is required for OpenAI provider.")
+            return ChatOpenAI(
+                model="gpt-3.5-turbo",
+                temperature=0.7,
+                api_key=settings.OPENAI_API_KEY,
+            )
+
+        if provider == "gemini":
+            if not settings.GOOGLE_API_KEY:
+                raise ValueError("GOOGLE_API_KEY is required for Gemini provider.")
+            return ChatGoogleGenerativeAI(
+                model="gemini-1.5-flash",
+                temperature=0.7,
+                google_api_key=settings.GOOGLE_API_KEY,
+            )
+
+        raise ValueError(f"Unsupported LLM_PROVIDER: {settings.LLM_PROVIDER}")
     
     def get_llm(self):
         """
@@ -51,8 +60,6 @@ class LLMService:
         """
         if self.llm is None:
             self.llm = self._initialize_llm()
-        if self.llm is None:
-            raise ValueError("OPENAI_API_KEY is required. Please set it in your .env file.")
         return self.llm
 
 

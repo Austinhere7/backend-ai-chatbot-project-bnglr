@@ -6,7 +6,7 @@ An intelligent chatbot backend that lets you have conversations powered by AI, w
 
 ## What Can It Do?
 
-- 💬 **Smart Conversations**: Chat with OpenAI's GPT models
+- 💬 **Smart Conversations**: Chat with OpenAI or Gemini models
 - 📄 **Document Understanding**: Upload PDFs or text files and ask questions about them
 - 🧠 **Context-Aware**: The bot remembers your conversation and uses it for better responses
 - 🔄 **Session Management**: Keep different conversations separate with unique sessions
@@ -42,7 +42,7 @@ Here's the basic flow of the application:
 │            ▼                        │
 │  ┌─────────────────┐               │
 │  │   LLM Service   │               │
-│  │   (OpenAI)      │               │
+│  │ (OpenAI/Gemini) │               │
 │  └─────────────────┘               │
 └─────────┬───────────────────────────┘
           │
@@ -93,8 +93,12 @@ nano .env  # or use notepad, vim, whatever you like
 **Here's what you need to configure:**
 
 ```env
-# Add your OpenAI API key
-OPENAI_API_KEY=sk-your-key-here
+# Choose your provider (openai or gemini)
+LLM_PROVIDER=gemini
+
+# Add your provider API key
+GOOGLE_API_KEY=your-gemini-key-here
+# OPENAI_API_KEY=sk-your-key-here
 ```
 
 ### Step 3: Fire It Up!
@@ -125,7 +129,7 @@ You should get back something like:
 {
   "message": "AI Chatbot API is running",
   "version": "1.0.0",
-  "llm_provider": "openai"
+  "llm_provider": "gemini"
 }
 ```
 
@@ -534,7 +538,9 @@ You can customize these in your `.env` file:
 | Setting | What It Does | Required? | Default |
 |---------|-------------|-----------|---------|
 | `DATABASE_URL` | Where to find your PostgreSQL database | Yes | `postgresql://chatbot_user:chatbot_password@localhost:5432/chatbot_db` |
-| `OPENAI_API_KEY` | Your OpenAI API key | Yes | - |
+| `LLM_PROVIDER` | Which LLM provider to use (`openai` or `gemini`) | Yes | `gemini` |
+| `OPENAI_API_KEY` | Your OpenAI API key | Only if `LLM_PROVIDER=openai` | - |
+| `GOOGLE_API_KEY` | Your Gemini API key | Only if `LLM_PROVIDER=gemini` | - |
 | `APP_HOST` | What address to run the server on | No | `0.0.0.0` |
 | `APP_PORT` | What port to use | No | `8000` |
 | `EMBEDDING_MODEL` | Which model to use for embeddings | No | `all-MiniLM-L6-v2` |

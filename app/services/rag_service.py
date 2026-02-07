@@ -175,7 +175,7 @@ Provide a helpful and accurate response based on the context and conversation hi
                 )
             return (
                 "The language model is not configured right now. "
-                "Please set OPENAI_API_KEY in the .env file to enable full responses."
+                "Set LLM_PROVIDER and the matching API key in the .env file to enable full responses."
             )
 
 

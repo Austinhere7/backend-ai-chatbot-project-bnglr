@@ -13,6 +13,7 @@ pgvector==0.2.4
 # LangChain and AI dependencies
 langchain==0.3.27
 langchain-openai==0.2.14
+langchain-google-genai==2.0.9
 langchain-community==0.3.27
 
 # Document processing
